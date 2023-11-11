@@ -1,3 +1,9 @@
+const User = require('./User');
+const Thought = require('./Thought');
+
+module.exports = { User, Thought, Reaction };
+
+
 // Use the following guidelines to set up your models and API routes:
 
 // ### Models
