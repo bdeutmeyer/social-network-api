@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema(
         },
         thoughts: [],
         friends: [],
-
     },
     {
         toJSON: {
@@ -24,9 +23,23 @@ const userSchema = new mongoose.Schema(
         },
         id: false,
     }
-)
-//still needs a virtual 'friendCount' that retrieves the length of the user's 'friends' array field on query
+);
 
-//need subdocuments?? need to create model User, need instance of model
+userSchema.virtual('friendCount').get(function (friends) {
+    return friendData.length; //i am confident this is not right--it's just a placeholder
+    //still needs a virtual 'friendCount' that retrieves the length of the user's 'friends' array field on query
+});
+
+const User = mongoose.model('user', userSchema);
+
+const thoughtData = [];
+const friendData = [];
+
+User
+    .create({ username: '', email: '', thoughts: thoughtData, friends: friendData })
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+
+//need subdocuments??
 
 module.exports = User;
