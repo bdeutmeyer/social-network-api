@@ -37,6 +37,7 @@ module.exports = {
     async createThought(req, res) {
         try {
             const thoughtToCreate = await Thought.create(req.body);
+            //push created thought's id to thoughts array!
             res.status(200).json(thoughtToCreate);
         } catch (err) {
             res.status(500).json(err);

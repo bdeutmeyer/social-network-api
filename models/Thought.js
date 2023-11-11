@@ -16,16 +16,13 @@ const reactionSchema = new mongoose.Schema(
             required: true,
         },
         createdAt: { type: Date, default: Date.now },
-        //getter method to format the timestamp on query
-
     },
-    {
-        toJSON: {
-            virtuals: true,
-        },
-        id: false,
-    }
 );
+
+//getter method to format the timestamp on query
+reactionSchema.methods.getDateFormat = function (date) {
+    return date.toLocaleDateString();
+};
 
 const thoughtSchema = new mongoose.Schema({
     thoughtText: {
@@ -34,17 +31,39 @@ const thoughtSchema = new mongoose.Schema({
         minLength: 1,
         maxLength: 280,
     },
-    createdAt: { type: Date, default: Date.now },
-    //getter method to format the timestamp on query
+    createdAt: { 
+        type: Date, 
+        default: Date.now 
+    },
     username: {
         type: String,
         required: true,
     },
     reactions: [],
+    },
+    {
+        toJSON: {
+            virtuals: true,
+        },
+        id: false,
+    }
+);
+//getter method to format the timestamp on query
+thoughtSchema.methods.getDateFormat = function (date) {
+    return date.toLocaleDateString();
+};
 
-})
-    //virtual called 'reactionCount' that retrieves the length of the thought's 'reactions' array field on query
-//example virtual: postSchema.virtual('commentCount').get(function () {
-//   return this.comments.length;
-// });
-//subdocuments, model, instance, export, 
+postSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
+});
+
+const Thought = mongoose.model('thought', thoughtSchema);
+
+const reactionData = [];
+
+Thought
+    .create({ thoughtText: '', username: '', reactions: reactionData })
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+
+module.exports = Thought;
