@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const reactionSchema = new mongoose.Schema(
     {
         reactionId: {
-            type: ObjectId,
+            type: ObjectId, 
+            default: () => new ObjectId(),
         },
         reactionBody: {
             type: String,
@@ -15,7 +16,9 @@ const reactionSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        createdAt: { type: Date, default: Date.now },
+        createdAt: { 
+            type: Date, 
+            default: Date.now },
     },
 );
 
@@ -44,6 +47,7 @@ const thoughtSchema = new mongoose.Schema({
     {
         toJSON: {
             virtuals: true,
+            getters: true,
         },
         id: false,
     }
@@ -53,7 +57,7 @@ thoughtSchema.methods.getDateFormat = function (date) {
     return date.toLocaleDateString();
 };
 
-postSchema.virtual('reactionCount').get(function () {
+reactionSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
 });
 
@@ -62,7 +66,7 @@ const Thought = mongoose.model('thought', thoughtSchema);
 const reactionData = [];
 
 Thought
-    .create({ thoughtText: '', username: '', reactions: reactionData })
+    .create({ thoughtText: 'Test thought', username: 'testuser', reactions: reactionData })
     .then(data => console.log(data))
     .catch(err => console.error(err));
 

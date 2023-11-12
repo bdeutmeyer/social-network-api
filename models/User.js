@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.virtual('friendCount').get(function (friends) {
-    return friendData.length; //i am confident this is not right--it's just a placeholder
+    return friendData.length; //i suspect this is not right--it's just a placeholder
     //still needs a virtual 'friendCount' that retrieves the length of the user's 'friends' array field on query
 });
 
@@ -36,7 +36,7 @@ const thoughtData = [];
 const friendData = [];
 
 User
-    .create({ username: '', email: '', thoughts: thoughtData, friends: friendData })
+    .create({ username: 'testuser', email: 'test@email.com', thoughts: thoughtData, friends: friendData })
     .then(data => console.log(data))
     .catch(err => console.error(err));
 
