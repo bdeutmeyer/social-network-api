@@ -68,25 +68,26 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-};
-
-
-
-
-
-
-
-
-
-
-
-
-// ---
-
 // **`/api/users/:userId/friends/:friendId`**
-
 // * `POST` to add a new friend to a user's friend list
+    async addFriend(req, res) {
+        try {
+            const friendToAdd = await User.findOne({ _id: req.params.friendId});
+            //somehow push to friends array
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 
 // * `DELETE` to remove a friend from a user's friend list
-
+    async removeFriend(req, res) {
+        try {
+            const friendToRemove = await User.findOne()
+            //not sure...
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    }
 // ---
+
+};
