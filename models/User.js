@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
         username: {
             type: String,
@@ -14,8 +14,14 @@ const userSchema = new mongoose.Schema(
             required: true,
             match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address.'],
         },
-        thoughts: [],
-        friends: [],
+        thoughts: [{ 
+            type: Schema.Types.ObjectId, 
+            ref: 'thought' 
+        }],
+        friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'user'
+        }],
     },
     {
         toJSON: {
@@ -25,12 +31,11 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-userSchema.virtual('friendCount').get(function (friends) {
-    return friendData.length; //i suspect this is not right--it's just a placeholder
-    //still needs a virtual 'friendCount' that retrieves the length of the user's 'friends' array field on query
+userSchema.virtual('friendCount').get(function () {
+    return this.friends.length; 
 });
 
-const User = mongoose.model('user', userSchema);
+const User = model('user', userSchema);
 
 const thoughtData = [];
 const friendData = [];
@@ -39,7 +44,5 @@ User
     .create({ username: 'testuser', email: 'test@email.com', thoughts: thoughtData, friends: friendData })
     .then(data => console.log(data))
     .catch(err => console.error(err));
-
-//need subdocuments??
 
 module.exports = User;
