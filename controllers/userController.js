@@ -14,26 +14,20 @@ module.exports = {
     // * `GET` a single user by its `_id` and populated thought and friend data
     async getSingleUser(req, res) {
         try {
-            const singleUser = await User.findOne({ _id: req.params.userId});
+            const singleUser = await User.findOne({ _id: req.params.userId})
+            .populate('thoughts')
+            .populate('friends');
 
             if (!singleUser) {
                 return res.status(404).json({ message: 'No user with that ID' });
             }
-// thought and friend data here
+
             res.status(200).json(singleUser);
         } catch (err) {
             res.status(500).json(err);
         }
     },
     // * `POST` a new user:
-
-// ```json
-// // example data
-// {
-//   "username": "lernantino",
-//   "email": "lernantino@gmail.com"
-// }
-// ```
     async createUser(req, res) {
         try {
             const userToCreate = await User.create(req.body);
@@ -56,10 +50,13 @@ module.exports = {
     },
     // * `DELETE` to remove user by its `_id`
 
-// **BONUS**: Remove a user's associated thoughts when deleted.
+// **BONUS**: Remove a user's associated thoughts when deleted. --ex25 lines 65-120ish
     async deleteUser(req, res) {
         try {
-            const userToDelete = await User.findByIdAndDelete(req.params.userId);
+            const userToDelete = await User.findByIdAndDelete(
+                req.params.userId,
+                {$pull: { thoughts: { userId: req.params.userId }}
+            });
             if (!userToDelete) {
                 return res.status(404).json({ message: 'No user with that ID' });
             }
@@ -73,7 +70,7 @@ module.exports = {
     async addFriend(req, res) {
         try {
             const friendToAdd = await User.findOne({ _id: req.params.friendId});
-            //somehow push to friends array
+            //somehow push to friends array - see 21
         } catch (err) {
             res.status(500).json(err);
         }

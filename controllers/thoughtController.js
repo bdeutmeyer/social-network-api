@@ -1,4 +1,4 @@
-const { Thought } = require('../models');
+const { Thought, User } = require('../models');
 
 // **`/api/thoughts`**
 module.exports = {
@@ -37,10 +37,22 @@ module.exports = {
     async createThought(req, res) {
         try {
             const thoughtToCreate = await Thought.create(req.body);
-            //push created thought's id to thoughts array!
-            res.status(200).json(thoughtToCreate);
+            const userWhoThought = await User.findOneAndUpdate(
+                { _id: req.body.userId },
+                { $addToSet: { thoughts: thoughtToCreate._id } },
+                { new: true }
+            );
+
+            if (!userWhoThought) {
+                return res.status(404).json({
+                    message: 'Thought created, but found no user with that ID'
+                })
+            }
+
+            res.status(200).json('Thought created!');
         } catch (err) {
             res.status(500).json(err);
+            console.log(err)
         }
     },
     // * `PUT` to update a thought by its `_id`
