@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const Thought = require('./Thought');
 
 const userSchema = new Schema(
     {
@@ -14,9 +15,9 @@ const userSchema = new Schema(
             required: true,
             match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address.'],
         },
-        thoughts: [{ 
-            type: Schema.Types.ObjectId, 
-            ref: 'thought' 
+        thoughts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'thought'
         }],
         friends: [{
             type: Schema.Types.ObjectId,
@@ -32,17 +33,29 @@ const userSchema = new Schema(
 );
 
 userSchema.virtual('friendCount').get(function () {
-    return this.friends.length; 
+    return this.friends.length;
 });
 
 const User = model('user', userSchema);
 
-const thoughtData = [];
-const friendData = [];
+// const thoughtData = [];
+// const friendData = [];
 
-User
-    .create({ username: 'testuser', email: 'test@email.com', thoughts: thoughtData, friends: friendData })
-    .then(data => console.log(data))
-    .catch(err => console.error(err));
+// User.find({})
+//     .exec()
+//     .then(collection => {
+//         if (collection.length === 0) {
+//             Thought
+//                 .create({
+//                     username: 'testuser', 
+//                     email: 'test@email.com', 
+//                     thoughts: thoughtData, 
+//                     friends: friendData
+//                 })
+//                 .then(data => console.log(data))
+//                 .catch(err => console.error(err));
+//         }
+//     })
+
 
 module.exports = User;
