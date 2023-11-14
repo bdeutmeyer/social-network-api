@@ -39,12 +39,19 @@ thoughtSchema.virtual('reactionCount').get(function () {
 
 const Thought = model('thought', thoughtSchema);
 
-const reactionData = [];
+// const reactionData = [];
 
-Thought
-    .create({ thoughtText: 'Test thought', username: 'testuser', reactions: reactionData })
-    .then(data => console.log(data))
-    .catch(err => console.error(err));
+// Thought.find({})
+//     .exec()
+//     .then(collection => {
+//         if (collection.length === 0) {
+//             Thought
+//             .create({ thoughtText: 'Test thought', username: 'testuser', reactions: reactionData })
+//             .then(data => console.log(data))
+//             .catch(err => console.error(err));
+//         }
+//     })
+
 
 // getDateFormat();
 

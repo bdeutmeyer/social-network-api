@@ -26,14 +26,6 @@ module.exports = {
         }
     },
     // * `POST` to create a new thought (don't forget to push the created thought's `_id` to the associated user's `thoughts` array field)
-    // ```json
-// // example data
-// {
-//   "thoughtText": "Here's a cool thought...",
-//   "username": "lernantino",
-//   "userId": "5edff358a0fcb779aa7b118b"
-// }
-// ```
     async createThought(req, res) {
         try {
             const thoughtToCreate = await Thought.create(req.body);
@@ -58,7 +50,11 @@ module.exports = {
     // * `PUT` to update a thought by its `_id`
     async updateThought(req, res) {
         try {
-            const thoughtToUpdate = await Thought.findByIdAndUpdate({ _id: req.params.thoughtId }, { thoughtText: req.body.thoughtText }, {new: true});
+            const thoughtToUpdate = await Thought.findByIdAndUpdate(
+                { _id: req.params.thoughtId },
+                { thoughtText: req.body.thoughtText },
+                {new: true});
+
             if (!thoughtToUpdate) {
                 return res.status(404).json({ message: 'No thought with that ID' });
             }
@@ -84,7 +80,11 @@ module.exports = {
 // * `POST` to create a reaction stored in a single thought's `reactions` array field
     async createReaction(req, res) {
         try {
-            const reactionToCreate = await Thought.create(req.body);
+            const reactionToCreate = await Thought.findOneAndUpdate(
+                { _id: req.params.thoughtId },
+                { $addToSet: { reactions: req.body } },
+                { new: true }
+                );
             res.status(200).json(reactionToCreate);
         } catch (err) {
             res.status(500).json(err);
@@ -93,9 +93,13 @@ module.exports = {
     // * `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
     async deleteReaction(req, res) {
         try {
-            const reactionToDelete = await Reaction.findByIdAndDelete(req.params.reactionId);
+            const reactionToDelete = await Thought.findOneAndUpdate(
+                {_id: req.params.thoughtId},
+                { $pull: { reactions: {reactionId: req.params.reactionId} } }
+                );
+
             if (!reactionToDelete) {
-                return res.status(404).json({ message: 'No reaction with that ID' });
+                return res.status(404).json({ message: 'Could not delete reaction. Please check thoughtId and reactionId for accuracy' });
             }
             res.status(200).json({ message: 'Reaction deleted' });
         } catch (err) {
@@ -103,3 +107,22 @@ module.exports = {
         }
     },
 };
+
+  // TODO: Add comments to the functionality of the addTag method - 
+//   async removeTag(req, res) {
+//     try {
+//       const application = await Application.findOneAndUpdate(
+//         { _id: req.params.applicationId },
+//         { $pull: { tags: { tagId: req.params.tagId } } },
+//         { runValidators: true, new: true }
+//       );
+
+//       if (!application) {
+//         return res.status(404).json({ message: 'No application with this id!' });
+//       }
+
+//       res.json(application);
+//     } catch (err) {
+//       res.status(500).json(err);
+//     }
+//   },
