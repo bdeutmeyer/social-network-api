@@ -57,7 +57,6 @@ module.exports = {
     // * `DELETE` to remove user by its `_id`
     async deleteUser(req, res) {
         try {
-            //   const userToDelete = await User.findByIdAndDelete({ _id: req.params.userId });
             const userToDelete = await User.findOne({ _id: req.params.userId });
             const username = userToDelete.username;
             const userDelete = await User.findByIdAndDelete({ _id: req.params.userId });
@@ -73,7 +72,7 @@ module.exports = {
         }
     },
 // **`/api/users/:userId/friends/:friendId`**
-// * `POST` to add a new friend to a user's friend list
+    // * `POST` to add a new friend to a user's friend list
     async addFriend(req, res) {
         try {
             const addingFriend = await User.findOneAndUpdate(
@@ -98,8 +97,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-
-// * `DELETE` to remove a friend from a user's friend list
+    // * `DELETE` to remove a friend from a user's friend list
     async removeFriend(req, res) {
         try {
             const removingFriend = await User.findOneAndUpdate(
@@ -113,7 +111,6 @@ module.exports = {
                 { $pull: { friends: req.params.userId }},
                 { new: true }
             );
-
 
             if (!removingFriend || !friendBeingRemoved) {
                 return res.status(404).json({

@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const Thought = require('./Thought');
 
 const userSchema = new Schema(
     {
@@ -37,25 +36,5 @@ userSchema.virtual('friendCount').get(function () {
 });
 
 const User = model('user', userSchema);
-
-// const thoughtData = [];
-// const friendData = [];
-
-// User.find({})
-//     .exec()
-//     .then(collection => {
-//         if (collection.length === 0) {
-//             Thought
-//                 .create({
-//                     username: 'testuser', 
-//                     email: 'test@email.com', 
-//                     thoughts: thoughtData, 
-//                     friends: friendData
-//                 })
-//                 .then(data => console.log(data))
-//                 .catch(err => console.error(err));
-//         }
-//     })
-
 
 module.exports = User;

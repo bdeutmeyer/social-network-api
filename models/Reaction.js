@@ -17,24 +17,19 @@ const reactionSchema = new Schema(
         },
         createdAt: { 
             type: Date, 
-            default: Date.now },
+            default: Date.now,
+            get: function(date){
+                return date.toLocaleDateString();
+            }
+        },
     },
     {
         toJSON: {
             getters: true,
         },
-        id: false
+        id: false,
     },
-    // {
-    //     _id: false
-    // }
+
 );
-
-//getter method to format the timestamp on query
-// reactionSchema.methods.getDateFormat = function (date) {
-//     return date.toLocaleDateString();
-// };
-
-// getDateFormat();
 
 module.exports = reactionSchema;
