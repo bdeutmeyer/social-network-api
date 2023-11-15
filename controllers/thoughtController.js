@@ -76,8 +76,7 @@ module.exports = {
         }
     },
 // **`/api/thoughts/:thoughtId/reactions`**
-
-// * `POST` to create a reaction stored in a single thought's `reactions` array field
+    // * `POST` to create a reaction stored in a single thought's `reactions` array field
     async createReaction(req, res) {
         try {
             const reactionToCreate = await Thought.findOneAndUpdate(
@@ -107,22 +106,3 @@ module.exports = {
         }
     },
 };
-
-  // TODO: Add comments to the functionality of the addTag method - 
-//   async removeTag(req, res) {
-//     try {
-//       const application = await Application.findOneAndUpdate(
-//         { _id: req.params.applicationId },
-//         { $pull: { tags: { tagId: req.params.tagId } } },
-//         { runValidators: true, new: true }
-//       );
-
-//       if (!application) {
-//         return res.status(404).json({ message: 'No application with this id!' });
-//       }
-
-//       res.json(application);
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   },
